@@ -29,7 +29,7 @@ export type Message =
 export type Usage = {
     promptTokens?: number;
     completionTokens?: number;
-    totlTokens?: number; // LLMがツール呼び出しを要求した場合
+    totalTokens?: number; // LLMがツール呼び出しを要求した場合
 }
 
 // GenerateTextResult型：統一された出力形式

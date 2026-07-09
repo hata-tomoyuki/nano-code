@@ -110,7 +110,7 @@ export function createOpenAI(config?: {
                     usage: {
                         promptTokens: completion.usage?.prompt_tokens,
                         completionTokens: completion.usage?.completion_tokens,
-                        totlTokens: completion.usage?.total_tokens
+                        totalTokens: completion.usage?.total_tokens
                     }
                 }
             } catch (error) {
