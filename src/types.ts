@@ -67,6 +67,6 @@ export class LLMApiError extends Error {
         public raw?: unknown
     ) {
         super(message || `LLM API Error: ${provider} returned ${status}`);
-        this.name = 'LMApiError';
+        this.name = 'LLMApiError';
     }
 }

@@ -1,4 +1,4 @@
-import openai, { OpenAI } from 'openai';
+import OpenAI from 'openai';
 import type {
     GenerateParams,
     GenerateTextResult,
@@ -10,13 +10,13 @@ import type {
 import { LLMApiError } from '../types';
 
 export function createOpenAI(config?: {
-    apikey?: string;
+    apiKey?: string;
     baseURL?: string;
     maxRetries?: number;
 }): Provider {
     // SDK初期化（認証はSDKが担当）
     const client = new OpenAI({
-        apiKey: config?.apikey, // 省略時は環境変数 OPENAI_API_KEY を自動参照
+        apiKey: config?.apiKey, // 省略時は環境変数 OPENAI_API_KEY を自動参照
         baseURL: config?.baseURL,
         maxRetries: config?.maxRetries ?? 0, // nano-code-core ガリトライを制御
     })
@@ -58,7 +58,7 @@ export function createOpenAI(config?: {
             case 'tool_calls':
                 return 'tool_calls';
             default:
-                'stop';
+                return 'stop';
         }
     }
     return (modelId: string): LanguageModel => ({
@@ -68,7 +68,7 @@ export function createOpenAI(config?: {
                 function: {
                     name: tool.name,
                     description: tool.description,
-                    paraemeters: tool.parameters
+                    parameters: tool.parameters
                 }
             }))
 
@@ -88,17 +88,20 @@ export function createOpenAI(config?: {
                 // 3.SDKの応答を統一型に変換
                 const choice = completion.choices[0]
                 if (!choice) {
-                    throw new LLMApiError('APIからの応答がありません')
+                    throw new LLMApiError(
+                        500,
+                        'openai',
+                        undefined,
+                        'APIからの応答がありません'
+                    )
                 }
                 const message = choice.message
 
-                const toolCalls: ToolCall[] | undefined = message.tool_calls?.map(
-                    (tc) => ({
-                        toolCallId: tc.id,
-                        name: tc.function.name,
-                        args: JSON.parse(tc.function.arguments)
-                    })
-                )
+                const toolCalls: ToolCall[] | undefined = message.tool_calls?.filter((tc) => tc.type === 'function').map((tc) => ({
+                    toolCallId: tc.id,
+                    name: tc.function.name,
+                    args: JSON.parse(tc.function.arguments),
+                }))
 
                 return {
                     text: message.content ?? '',
