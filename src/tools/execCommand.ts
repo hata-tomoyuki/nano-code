@@ -179,6 +179,7 @@ async function execCommandExcecute(args: { command: string }): Promise<string> {
 export const execCommand = {
     name: 'execCommand',
     description: 'ワークスペース内で許可された汎用コマンドを実行する。利用可能：bun, ls, git, gh',
+    needsApproval: true, // 承認が必要
     parameters: {
         type: 'object',
         properties: {
