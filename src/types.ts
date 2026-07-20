@@ -2,9 +2,9 @@
 export type Tool = {
     name: string;
     description: string;
-    needsApproval: boolean, // 承認が必要か
-    parameters: Record<string, unknown>;
-    execute: (args: Record<string, unknown>) => Promise<string>
+    needsApproval?: boolean, // 承認が必要か
+    parameters?: Record<string, unknown>;
+    execute: (args: any) => Promise<string>
 }
 
 // ツール呼び出しの型

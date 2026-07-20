@@ -6,6 +6,10 @@ import { readFile } from '../src/tools/readFile';
 import { writeFile } from '../src/tools/writeFile';
 import { editFile } from '../src/tools/editFile';
 import { execCommand } from '../src/tools/execCommand';
+import { parseArgs } from 'util';
+import { commit, createBranch, pushBranch } from '../src/tools/git';
+import { createIssueComment, createPullRequest } from '../src/tools/github';
+import type { Tool } from '../src/types';
 
 async function main() {
     const args = process.argv.slice(2)
@@ -27,6 +31,16 @@ async function main() {
     // プロンプトを読み込む（ベース＋AGENTS.md）
     const instructions = loadInstructions(workspaceRoot)
 
+    const { values } = parseArgs({
+        args: process.argv.slice(2),
+        options: {
+            'yolo': { type: 'boolean', default: false }
+        },
+        allowPositionals: true
+    })
+
+    const yoloMode = values['yolo']
+
     // エージェントを作成
     const agent = new Agent({
         name: 'nano-code',
@@ -36,9 +50,15 @@ async function main() {
             readFile,
             writeFile,
             editFile,
-            execCommand
-        },
-        maxSteps: 15
+            execCommand,
+            createBranch,
+            commit,
+            pushBranch,
+            createPullRequest,
+            createIssueComment
+        } as Record<string, Tool>,
+        maxSteps: 15,
+        approvalFunc: yoloMode ? async () => true : undefined
     })
 
     console.log('エージェント起動\n')
