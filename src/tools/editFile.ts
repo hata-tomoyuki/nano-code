@@ -63,5 +63,5 @@ export const editFile = {
         },
         required: ["path", "oldText", "newText"]
     },
-    execute: editFileExecute
+    execute: (args: Record<string, unknown>) => editFileExecute(args as { path: string; oldText: string; newText: string })
 }

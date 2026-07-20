@@ -54,7 +54,7 @@ export const readFile = {
                 description: "読み込むファイルのパス（例： 'README.md', 'src/index.ts'）"
             }
         },
-        reqiured: ["path"]
+        required: ["path"]
     },
-    execute: readFileExecute
+    execute: (args: Record<string, unknown>) => readFileExecute(args as { path: string })
 }

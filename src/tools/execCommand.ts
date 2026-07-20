@@ -77,10 +77,10 @@ export function parseCommand(input: string): string[] {
 }
 
 // ==============================
-// execCommandExcecute：安全なコマンド実行
+// execCommandExecute：安全なコマンド実行
 // ==============================
 
-async function execCommandExcecute(args: { command: string }): Promise<string> {
+async function execCommandExecute(args: { command: string }): Promise<string> {
     // 1. 危険文字チェック
     if (dangerousChars.test(args.command)) {
         throw new Error('コマンド連結・置換文字を含むコマンドは実行できません')
@@ -190,5 +190,5 @@ export const execCommand = {
         },
         required: ['command']
     },
-    execute: execCommandExcecute
+    execute: (args: Record<string, unknown>) => execCommandExecute(args as { command: string })
 }

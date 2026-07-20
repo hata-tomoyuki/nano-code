@@ -44,5 +44,5 @@ export const writeFile = {
         },
         required: ["path", "content"]
     },
-    execute: writeFileExecute
+    execute: (args: Record<string, unknown>) => writeFileExecute(args as { path: string; content: string })
 }

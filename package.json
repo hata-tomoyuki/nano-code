@@ -13,5 +13,8 @@
     "@anthropic-ai/sdk": "^0.110.0",
     "@google/genai": "^2.10.0",
     "openai": "^6.45.0"
+  },
+  "scripts": {
+    "agent": "bun run bin/cli.ts"
   }
 }
