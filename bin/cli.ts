@@ -84,6 +84,7 @@ async function main() {
             createIssueComment
         } as Record<string, Tool>,
         maxSteps: 30,
+        verbose: true,
         approvalFunc: yoloMode ? async () => true : undefined
     })
 
