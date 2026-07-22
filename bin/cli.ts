@@ -65,6 +65,8 @@ async function main() {
     // 5. モデルを生成
     const model = createModelFromEnv()
 
+    console.log(`[debug] isIssueDriven=${isIssueDriven}, positionals=${JSON.stringify(positionals)}`)
+
     // 6. エージェントを作成
     const agent = new Agent({
         name: 'nano-code',
@@ -81,7 +83,7 @@ async function main() {
             createPullRequest,
             createIssueComment
         } as Record<string, Tool>,
-        maxSteps: 15,
+        maxSteps: 30,
         approvalFunc: yoloMode ? async () => true : undefined
     })
 
