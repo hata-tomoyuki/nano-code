@@ -24,6 +24,29 @@ function writeTempFile(content: string, prefix: string): string {
 export const createPullRequest = {
     name: 'createPullRequest',
     description: 'ghコマンドを使ってPRを作成する。既存PRがあれば更新',
+    needsApproval: true,
+    parameters: {
+        type: 'object',
+        properties: {
+            title: {
+                type: 'string',
+                description: 'プルリクエストのタイトル'
+            },
+            body: {
+                type: 'string',
+                description: 'プルリクエストの本文（変更内容の説明）'
+            },
+            base: {
+                type: 'string',
+                description: 'マージ先のブランチ名（通常は main）'
+            },
+            head: {
+                type: 'string',
+                description: '変更を含むブランチ名'
+            }
+        },
+        required: ['title', 'body', 'base', 'head']
+    },
     execute: async (args: {
         title: string;
         body: string;
@@ -62,6 +85,21 @@ export const createPullRequest = {
 export const createIssueComment = {
     name: 'createIssueComment',
     description: 'Issue コメントを投稿する',
+    needsApproval: true,
+    parameters: {
+        type: 'object',
+        properties: {
+            issueNumber: {
+                type: 'number',
+                description: 'コメントを投稿する Issue の番号'
+            },
+            body: {
+                type: 'string',
+                description: 'コメント本文（作成したPRのURLなど）'
+            }
+        },
+        required: ['issueNumber', 'body']
+    },
     execute: async (args: { issueNumber: number; body: string }) => {
         const bodyFile = writeTempFile(args.body, 'issue-comment')
         try {
